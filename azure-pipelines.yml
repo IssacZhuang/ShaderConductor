@@ -37,21 +37,23 @@ stages:
   condition: succeeded('ClangFormat')
   jobs:
 
-  - job: Windows_vc141_x64
+  - job: Windows_vc142_x64
     pool:
-      vmImage: VS2017-Win2016
+      vmImage: windows-2019
 
     variables:
-      compiler: vc141
+      compiler: vc142
       combination: 'win-$(compiler)-$(platform)-$(configuration)'
       buildFolder: 'Build/ninja-$(combination)'
-      installCommand: 'choco install ninja python3'
+      installCommand: 'choco install ninja'
       testCommand: './$(buildFolder)/Bin/ShaderConductorTest.exe'
       artifactBinaries: |
         Bin/ShaderConductor.dll
         Bin/ShaderConductorCmd.exe
         Bin/dxcompiler.dll
+        Bin/ShaderConductorWrapper.dll
         Lib/ShaderConductor.lib
+        **/*.dll
 
     steps:
     - template: CI/AzurePipelines/ContinuousBuild.yml
@@ -73,6 +75,8 @@ stages:
         Bin/ShaderConductorCmd
         Lib/libdxcompiler.so
         Lib/libShaderConductor.so
+        Lib/libShaderConductorWrapper.so
+        **/*.so
       CC: gcc-8
       CXX: g++-8
 
@@ -95,6 +99,8 @@ stages:
         Bin/ShaderConductorCmd
         Lib/libdxcompiler.dylib
         Lib/libShaderConductor.dylib
+        Lib/libShaderConductorWrapper.dylib
+        **/*.dylib
       CC: clang
       CXX: clang++
 
