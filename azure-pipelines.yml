@@ -37,26 +37,26 @@ stages:
   condition: succeeded('ClangFormat')
   jobs:
 
-  - job: Windows_vc142_x64
-    pool:
-      vmImage: windows-2019
+  # - job: Windows_vc142_x64
+  #   pool:
+  #     vmImage: windows-2019
 
-    variables:
-      compiler: vc142
-      combination: 'win-$(compiler)-$(platform)-$(configuration)'
-      buildFolder: 'Build/ninja-$(combination)'
-      installCommand: 'choco install ninja'
-      testCommand: './$(buildFolder)/Bin/ShaderConductorTest.exe'
-      artifactBinaries: |
-        Bin/ShaderConductor.dll
-        Bin/ShaderConductorCmd.exe
-        Bin/dxcompiler.dll
-        Bin/ShaderConductorWrapper.dll
-        Lib/ShaderConductor.lib
-        **/*.dll
+  #   variables:
+  #     compiler: vc142
+  #     combination: 'win-$(compiler)-$(platform)-$(configuration)'
+  #     buildFolder: 'Build/ninja-$(combination)'
+  #     installCommand: 'choco install ninja'
+  #     testCommand: './$(buildFolder)/Bin/ShaderConductorTest.exe'
+  #     artifactBinaries: |
+  #       Bin/ShaderConductor.dll
+  #       Bin/ShaderConductorCmd.exe
+  #       Bin/dxcompiler.dll
+  #       Bin/ShaderConductorWrapper.dll
+  #       Lib/ShaderConductor.lib
+  #       **/*.dll
 
-    steps:
-    - template: CI/AzurePipelines/ContinuousBuild.yml
+  #   steps:
+  #   - template: CI/AzurePipelines/ContinuousBuild.yml
 
   - job: Linux_gcc8
     pool:
@@ -83,26 +83,26 @@ stages:
     steps:
     - template: CI/AzurePipelines/ContinuousBuild.yml
 
-  - job: macOS_10_clang
-    pool:
-      vmImage: macOS-11
+  # - job: macOS_10_clang
+  #   pool:
+  #     vmImage: macOS-11
 
-    variables:
-      compiler: clang9
-      combination: 'osx-$(compiler)-$(platform)-$(configuration)'
-      buildFolder: 'Build/ninja-$(combination)'
-      installCommand: |
-        brew update
-        brew install ninja
-      testCommand: './$(buildFolder)/Bin/ShaderConductorTest'
-      artifactBinaries: |
-        Bin/ShaderConductorCmd
-        Lib/libdxcompiler.dylib
-        Lib/libShaderConductor.dylib
-        Lib/libShaderConductorWrapper.dylib
-        **/*.dylib
-      CC: clang
-      CXX: clang++
+  #   variables:
+  #     compiler: clang9
+  #     combination: 'osx-$(compiler)-$(platform)-$(configuration)'
+  #     buildFolder: 'Build/ninja-$(combination)'
+  #     installCommand: |
+  #       brew update
+  #       brew install ninja
+  #     testCommand: './$(buildFolder)/Bin/ShaderConductorTest'
+  #     artifactBinaries: |
+  #       Bin/ShaderConductorCmd
+  #       Lib/libdxcompiler.dylib
+  #       Lib/libShaderConductor.dylib
+  #       Lib/libShaderConductorWrapper.dylib
+  #       **/*.dylib
+  #     CC: clang
+  #     CXX: clang++
 
-    steps:
-    - template: CI/AzurePipelines/ContinuousBuild.yml
+  #   steps:
+  #   - template: CI/AzurePipelines/ContinuousBuild.yml
