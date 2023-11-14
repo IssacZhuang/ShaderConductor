@@ -58,18 +58,20 @@ stages:
   #   steps:
   #   - template: CI/AzurePipelines/ContinuousBuild.yml
 
-  - job: Linux_gcc8
+  - job: Linux_clang8
     pool:
       vmImage: Ubuntu-20.04
 
     variables:
-      compiler: gcc8
+      compiler: clang8
       combination: 'linux-$(compiler)-$(platform)-$(configuration)'
       buildFolder: 'Build/ninja-$(combination)'
       installCommand: |
+        wget -O - http://apt.llvm.org/llvm-snapshot.gpg.key | sudo apt-key add -
+        sudo add-apt-repository "deb http://apt.llvm.org/xenial/ llvm-toolchain-xenial-8 main"
         sudo add-apt-repository ppa:ubuntu-toolchain-r/test
         sudo apt-get update
-        sudo apt-get install g++-8 ninja-build python3
+        sudo apt-get install clang-8 libc++-8-dev libc++abi-8-dev lld-8 ninja-build python3
       testCommand: './$(buildFolder)/Bin/ShaderConductorTest'
       artifactBinaries: |
         Bin/ShaderConductorCmd
@@ -77,8 +79,8 @@ stages:
         Lib/libShaderConductor.so
         Lib/libShaderConductorWrapper.so
         **/*.so
-      CC: gcc-8
-      CXX: g++-8
+      CC: clang-8
+      CXX: clang++-8
 
     steps:
     - template: CI/AzurePipelines/ContinuousBuild.yml
