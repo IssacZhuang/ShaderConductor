@@ -4,7 +4,11 @@
 cmake_minimum_required(VERSION 3.9)
 
 
-set(SC_WITH_CSHARP ON)
+if(WIN32 AND (${CMAKE_GENERATOR} MATCHES "Visual Studio ([^9]|[9][0-9])") AND (NOT SC_CLANGFORMAT))
+    set(SC_WITH_CSHARP ON)
+else()
+    set(SC_WITH_CSHARP OFF)
+endif()
 
 
 set(PROJECT_NAME ShaderConductor)
