@@ -23,11 +23,14 @@ add_dependencies(${DLL_NAME} ShaderConductor)
 set_target_properties(${DLL_NAME} PROPERTIES FOLDER "Wrapper")
 
 if(NOT WIN32)
+    set(CMAKE_SKIP_BUILD_RPATH FALSE)
+    set(CMAKE_BUILD_WITH_INSTALL_RPATH FALSE)
     if(APPLE)
         SET(CMAKE_INSTALL_RPATH "@loader_path")
     else()
         SET(CMAKE_INSTALL_RPATH "$ORIGIN")
     endif()
+    set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 endif()
 
 
