@@ -3,6 +3,7 @@
 
 set(DLL_NAME ShaderConductorWrapper)
 
+
 set(SOURCE_FILES
     Native.cpp
     Native.h
@@ -20,6 +21,15 @@ target_link_libraries(${DLL_NAME}
 add_dependencies(${DLL_NAME} ShaderConductor)
 
 set_target_properties(${DLL_NAME} PROPERTIES FOLDER "Wrapper")
+
+if(NOT WIN32)
+    if(APPLE)
+        set_target_properties(${DLL_NAME} PROPERTIES INSTALL_RPATH "@loader_path")
+    else()
+        set_target_properties(${DLL_NAME} PROPERTIES INSTALL_RPATH "$ORIGIN")
+    endif()
+endif()
+
 
 if(SC_WITH_CSHARP)
     set(CSHARP_TEST CSharpPinvoke)
