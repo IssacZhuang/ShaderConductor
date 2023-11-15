@@ -60,7 +60,7 @@ stages:
 
   - job: Linux_clang13
     pool:
-      vmImage: Ubuntu-20.04
+      vmImage: Ubuntu-22.04
 
     variables:
       compiler: clang13
