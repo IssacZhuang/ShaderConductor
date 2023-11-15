@@ -79,6 +79,7 @@ stages:
         Lib/libShaderConductor.so
         Lib/libShaderConductorWrapper.so
         **/*.so
+        **/*.3.7
       CC: clang-9
       CXX: clang++-9
 
