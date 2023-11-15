@@ -24,9 +24,9 @@ set_target_properties(${DLL_NAME} PROPERTIES FOLDER "Wrapper")
 
 if(NOT WIN32)
     if(APPLE)
-        set_target_properties(${DLL_NAME} PROPERTIES INSTALL_RPATH "@loader_path")
+        SET(CMAKE_INSTALL_RPATH "@loader_path")
     else()
-        set_target_properties(${DLL_NAME} PROPERTIES INSTALL_RPATH "$ORIGIN")
+        SET(CMAKE_INSTALL_RPATH "$ORIGIN")
     endif()
 endif()
 
