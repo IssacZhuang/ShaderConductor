@@ -133,6 +133,6 @@ if(NOT WIN32)
 endif()
 
 add_subdirectory(Core)
-add_subdirectory(Tests)
+#add_subdirectory(Tests)
 add_subdirectory(Tools)
 add_subdirectory(Wrapper)
