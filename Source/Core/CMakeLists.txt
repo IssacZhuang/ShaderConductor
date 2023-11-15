@@ -2,30 +2,28 @@
 # Licensed under the MIT License.
 
 if(WIN32)
-    set(dxcompilerSrcName "dxcompiler.dll")
-    set(dxcompilerDstName ${dxcompilerSrcName})
-    set(dxcompilerOutputDir "bin")
-    set(dxcompilerDeployDir "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${CMAKE_CFG_INTDIR}")
+    set(dxcompilerName "dxcompiler.dll")
+    set(runtimeOutputFolder "bin")
+    set(copyTargetFolder ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
 else()
     if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
-        set(dxcompilerSrcName "libdxcompiler.3.7.dylib")
-        set(dxcompilerDstName "libdxcompiler.dylib")
+        set(dxcompilerName "libdxcompiler.dylib")
     else()
-        set(dxcompilerSrcName "libdxcompiler.so.3.7")
-        set(dxcompilerDstName "libdxcompiler.so")
+        set(dxcompilerName "libdxcompiler.so")
     endif()
-    set(dxcompilerOutputDir "lib")
-    set(dxcompilerDeployDir "${CMAKE_LIBRARY_OUTPUT_DIRECTORY}")
+    set(runtimeOutputFolder "lib")
+    set(copyTargetFolder ${CMAKE_LIBRARY_OUTPUT_DIRECTORY})
 endif()
 
-add_custom_target(DeployDxcompiler ALL
-    COMMAND ${CMAKE_COMMAND} -E create_hardlink
-        ${SC_BUILD_DIR}/External/DirectXShaderCompiler/${CMAKE_CFG_INTDIR}/${dxcompilerOutputDir}/${dxcompilerSrcName}
-        ${dxcompilerDeployDir}/${dxcompilerDstName}
-    COMMENT "Deploying dxcompiler...")
-add_dependencies(DeployDxcompiler dxcompiler)
+set(dxcompilerOutput "${copyTargetFolder}/${CMAKE_CFG_INTDIR}/${dxcompilerName}")
+add_custom_target(CopyDxcompiler ALL
+    COMMAND ${CMAKE_COMMAND} -E copy
+        ${SC_BUILD_DIR}/External/DirectXShaderCompiler/${CMAKE_CFG_INTDIR}/${runtimeOutputFolder}/${dxcompilerName}
+        ${dxcompilerOutput}
+    COMMENT "Copying dxcompiler...")
+add_dependencies(CopyDxcompiler dxcompiler)
 
-set_target_properties(DeployDxcompiler PROPERTIES FOLDER "Core")
+set_target_properties(CopyDxcompiler PROPERTIES FOLDER "Core")
 
 
 set(LIB_NAME ShaderConductor)
@@ -69,6 +67,7 @@ if(MSVC)
 endif()
 target_link_libraries(${LIB_NAME}
     PRIVATE
+        dxcompiler
         LLVMDxcSupport
         LLVMSupport
         spirv-cross-core
@@ -80,7 +79,7 @@ target_link_libraries(${LIB_NAME}
 )
 
 add_dependencies(${LIB_NAME} spirv-cross-core spirv-cross-glsl spirv-cross-hlsl spirv-cross-msl)
-add_dependencies(${LIB_NAME} DeployDxcompiler)
+add_dependencies(${LIB_NAME} CopyDxcompiler)
 add_dependencies(${LIB_NAME} SPIRV-Tools)
 
 set_target_properties(${LIB_NAME} PROPERTIES FOLDER "Core")

@@ -3,11 +3,13 @@
 
 cmake_minimum_required(VERSION 3.9)
 
+
 if(WIN32 AND (${CMAKE_GENERATOR} MATCHES "Visual Studio ([^9]|[9][0-9])") AND (NOT SC_CLANGFORMAT))
     set(SC_WITH_CSHARP ON)
 else()
     set(SC_WITH_CSHARP OFF)
 endif()
+
 
 set(PROJECT_NAME ShaderConductor)
 project(${PROJECT_NAME})
@@ -27,26 +29,14 @@ mark_as_advanced(SC_ROOT_DIR)
 
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${SC_BUILD_DIR}/bin)
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${SC_BUILD_DIR}/lib)
-set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${SC_BUILD_DIR}/lib)
-
-if(NOT WIN32)
-    set(CMAKE_BUILD_WITH_INSTALL_RPATH ON)
-    if(APPLE)
-        set(CMAKE_INSTALL_NAME_DIR "@rpath")
-        set(CMAKE_INSTALL_RPATH "@executable_path/../lib")
-    else()
-        if(NOT DEFINED CMAKE_INSTALL_RPATH)
-            set(CMAKE_INSTALL_RPATH "\$ORIGIN/../lib")
-        endif()
-    endif()
-endif()
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${SC_BUILD_DIR}/Bin)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${SC_BUILD_DIR}/Lib)
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${SC_BUILD_DIR}/Lib)
 
 if((CMAKE_C_COMPILER_ID MATCHES GNU) OR (CMAKE_C_COMPILER_ID MATCHES Clang))
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++1z")
 endif()
-if(CMAKE_C_COMPILER_ID MATCHES Clang)
+if (CMAKE_C_COMPILER_ID MATCHES Clang)
     foreach(flagVar
         CMAKE_C_FLAGS CMAKE_CXX_FLAGS)
         set(${flagVar} "${${flagVar}} -fms-extensions -Wno-language-extension-token")
@@ -111,7 +101,7 @@ else()
     endif()
 endif()
 
-add_subdirectory(External)
 add_subdirectory(Source)
+add_subdirectory(External)
 
 set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT "ShaderConductorCmd")
