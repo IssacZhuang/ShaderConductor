@@ -72,7 +72,11 @@ stages:
         sudo add-apt-repository ppa:ubuntu-toolchain-r/test
         sudo apt-get update
         sudo apt-get install clang-11 libc++-11-dev libc++abi-11-dev lld-11 ninja-build python3
+        sudo apt-get install chrpath
       testCommand: './$(buildFolder)/Bin/ShaderConductorTest'
+      rpathCommand: |
+        chrpath -r '$ORIGIN' './$(buildFolder)/Lib/libShaderConductor.so'
+        chrpath -r '$ORIGIN' './$(buildFolder)/Lib/libShaderConductorWrapper.so'
       artifactBinaries: |
         Bin/ShaderConductorCmd
         Lib/libdxcompiler.so
@@ -86,26 +90,30 @@ stages:
     steps:
     - template: CI/AzurePipelines/ContinuousBuild.yml
 
-  # - job: macOS_10_clang
-  #   pool:
-  #     vmImage: macOS-11
+  - job: macOS_10_clang
+    pool:
+      vmImage: macOS-11
 
-  #   variables:
-  #     compiler: clang9
-  #     combination: 'osx-$(compiler)-$(platform)-$(configuration)'
-  #     buildFolder: 'Build/ninja-$(combination)'
-  #     installCommand: |
-  #       brew update
-  #       brew install ninja
-  #     testCommand: './$(buildFolder)/Bin/ShaderConductorTest'
-  #     artifactBinaries: |
-  #       Bin/ShaderConductorCmd
-  #       Lib/libdxcompiler.dylib
-  #       Lib/libShaderConductor.dylib
-  #       Lib/libShaderConductorWrapper.dylib
-  #       **/*.dylib
-  #     CC: clang
-  #     CXX: clang++
+    variables:
+      compiler: clang11
+      combination: 'osx-$(compiler)-$(platform)-$(configuration)'
+      buildFolder: 'Build/ninja-$(combination)'
+      installCommand: |
+        brew update
+        brew install ninja
+        brew install chrpath
+      testCommand: './$(buildFolder)/Bin/ShaderConductorTest'
+      rpathCommand: |
+        chrpath -r '@loader_path' './$(buildFolder)/Lib/libShaderConductor.dylib'
+        chrpath -r '@loader_path' './$(buildFolder)/Lib/libShaderConductorWrapper.dylib'
+      artifactBinaries: |
+        Bin/ShaderConductorCmd
+        Lib/libdxcompiler.dylib
+        Lib/libShaderConductor.dylib
+        Lib/libShaderConductorWrapper.dylib
+        **/*.dylib
+      CC: clang
+      CXX: clang++
 
-  #   steps:
-  #   - template: CI/AzurePipelines/ContinuousBuild.yml
+    steps:
+    - template: CI/AzurePipelines/ContinuousBuild.yml
