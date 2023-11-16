@@ -72,7 +72,7 @@ stages:
         sudo add-apt-repository ppa:ubuntu-toolchain-r/test
         sudo apt-get update
         sudo apt-get install clang-11 libc++-11-dev libc++abi-11-dev lld-11 ninja-build python3
-      #testCommand: './$(buildFolder)/Bin/ShaderConductorTest'
+      testCommand: './$(buildFolder)/Bin/ShaderConductorTest'
       artifactBinaries: |
         Bin/ShaderConductorCmd
         Lib/libdxcompiler.so
