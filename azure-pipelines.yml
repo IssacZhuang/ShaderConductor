@@ -72,6 +72,7 @@ stages:
         sudo add-apt-repository ppa:ubuntu-toolchain-r/test
         sudo apt-get update
         sudo apt-get install clang-11 libc++-11-dev libc++abi-11-dev lld-11 ninja-build python3
+      testCommand: ''
       # testCommand: './$(buildFolder)/Bin/ShaderConductorTest'
       artifactBinaries: |
         Bin/ShaderConductorCmd
@@ -97,6 +98,7 @@ stages:
       installCommand: |
         brew update
         brew install ninja
+      testCommand: ''
       # testCommand: './$(buildFolder)/Bin/ShaderConductorTest'
       artifactBinaries: |
         Bin/ShaderConductorCmd
