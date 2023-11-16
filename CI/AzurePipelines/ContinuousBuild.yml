@@ -13,9 +13,9 @@ steps:
     scriptPath: BuildAll.py
     arguments: 'ninja $(compiler) $(platform) $(configuration)'
 
-# - bash: eval '$(testCommand)'
-#   displayName: 'Test'
-#   condition: not(eq('$(testCommand)', ''))
+- bash: eval '$(testCommand)'
+  displayName: 'Test'
+  condition: not(eq('$(testCommand)', ''))
 
 - bash: 'echo $BUILD_SOURCEVERSION > $BUILD_ARTIFACTSTAGINGDIRECTORY/GIT-COMMIT.txt'
   displayName: 'Add commit info'
