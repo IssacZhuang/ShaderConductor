@@ -58,20 +58,47 @@ stages:
     steps:
     - template: CI/AzurePipelines/ContinuousBuild.yml
 
-  - job: Linux_clang13
+  # - job: Linux_clang11
+  #   pool:
+  #     vmImage: Ubuntu-22.04
+
+  #   variables:
+  #     compiler: clang11
+  #     combination: 'linux-$(compiler)-$(platform)-$(configuration)'
+  #     buildFolder: 'Build/ninja-$(combination)'
+  #     installCommand: |
+  #       wget -O - http://apt.llvm.org/llvm-snapshot.gpg.key | sudo apt-key add -
+  #       sudo add-apt-repository "deb http://apt.llvm.org/xenial/ llvm-toolchain-xenial-11 main"
+  #       sudo add-apt-repository ppa:ubuntu-toolchain-r/test
+  #       sudo apt-get update
+  #       sudo apt-get install clang-11 libc++-11-dev libc++abi-11-dev lld-11 ninja-build python3
+  #     testCommand: ''
+  #     # testCommand: './$(buildFolder)/Bin/ShaderConductorTest'
+  #     artifactBinaries: |
+  #       Bin/ShaderConductorCmd
+  #       Lib/libdxcompiler.so
+  #       Lib/libShaderConductor.so
+  #       Lib/libShaderConductorWrapper.so
+  #       **/*.so
+  #       **/*.3.7
+  #     CC: clang-11
+  #     CXX: clang++-11
+
+  #   steps:
+  #   - template: CI/AzurePipelines/ContinuousBuild.yml
+    
+  - job: Linux_gcc12
     pool:
-      vmImage: Ubuntu-22.04
+      vmImage: Ubuntu-20.04
 
     variables:
-      compiler: clang11
+      compiler: gcc11
       combination: 'linux-$(compiler)-$(platform)-$(configuration)'
       buildFolder: 'Build/ninja-$(combination)'
       installCommand: |
-        wget -O - http://apt.llvm.org/llvm-snapshot.gpg.key | sudo apt-key add -
-        sudo add-apt-repository "deb http://apt.llvm.org/xenial/ llvm-toolchain-xenial-11 main"
         sudo add-apt-repository ppa:ubuntu-toolchain-r/test
         sudo apt-get update
-        sudo apt-get install clang-11 libc++-11-dev libc++abi-11-dev lld-11 ninja-build python3
+        sudo apt-get install g++-11 ninja-build python3
       testCommand: ''
       # testCommand: './$(buildFolder)/Bin/ShaderConductorTest'
       artifactBinaries: |
@@ -81,8 +108,8 @@ stages:
         Lib/libShaderConductorWrapper.so
         **/*.so
         **/*.3.7
-      CC: clang-11
-      CXX: clang++-11
+      CC: gcc-11
+      CXX: g++-11
 
     steps:
     - template: CI/AzurePipelines/ContinuousBuild.yml
