@@ -92,13 +92,13 @@ stages:
       vmImage: Ubuntu-20.04
 
     variables:
-      compiler: gcc10
+      compiler: gcc9
       combination: 'linux-$(compiler)-$(platform)-$(configuration)'
       buildFolder: 'Build/ninja-$(combination)'
       installCommand: |
         sudo add-apt-repository ppa:ubuntu-toolchain-r/test
         sudo apt-get update
-        sudo apt-get install g++-10 ninja-build python3
+        sudo apt-get install g++-9 ninja-build python3
       testCommand: ''
       # testCommand: './$(buildFolder)/Bin/ShaderConductorTest'
       artifactBinaries: |
@@ -108,8 +108,8 @@ stages:
         Lib/libShaderConductorWrapper.so
         **/*.so
         **/*.3.7
-      CC: gcc-10
-      CXX: g++-10
+      CC: gcc-9
+      CXX: g++-9
 
     steps:
     - template: CI/AzurePipelines/ContinuousBuild.yml
